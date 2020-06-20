@@ -1,4 +1,5 @@
 import {createAction, createReducer, createSlice} from '@reduxjs/toolkit';
+import {createSelector} from 'reselect';
 
 //USING CREATE SLICE APPROACH
 
@@ -11,8 +12,13 @@ const slice = createSlice({
             bugs.push({
                 id: ++lastId,
                 resolved: false,
-                description: action.payload.description
+                description: action.payload.description,
+                userId: action.payload.userId
             });
+        },
+        bugAssignToUser: (bugs, action) => {
+            const index = bugs.findIndex(bug => bug.id === action.payload.bugId);
+            bugs[index].userId = action.payload.userId;
         },
         bugResolved: (bugs, action) => {
             const index = bugs.findIndex(bug => bug.id === action.payload.id);
@@ -24,13 +30,23 @@ const slice = createSlice({
         }
     }
 });
-export const {bugRemoved, bugAdded, bugResolved} = slice.actions;
+export const {bugRemoved, bugAdded, bugResolved, bugAssignToUser} = slice.actions;
 
 export default slice.reducer;
 
 //SELECTORS
-export const getUnresolvedBugs = state => 
-    state.entities.bugs.filter(bug => !bug.resolved)
+// export const getUnresolvedBugs = state => 
+//     state.entities.bugs.filter(bug => !bug.resolved);
+
+//USING CACHE SELECTOR (Memolization)
+export const getUnresolvedBugs = createSelector(
+    state => state.entities.bugs,
+    bugs => bugs.filter(bug => !bug.resolved)
+);
+export const getBugsAssignedTouser = userId => createSelector(
+    state => state.entities.bugs,
+    bugs => bugs.filter(bug => bug.userId === userId)
+);
 
 
 //ACTION TYPE
