@@ -10,8 +10,8 @@ const slice = createSlice({
         bugAdded: (bugs, action) => {
             bugs.push({
                 id: ++lastId,
-                        resolved: false,
-                        description: action.payload.description
+                resolved: false,
+                description: action.payload.description
             });
         },
         bugResolved: (bugs, action) => {
