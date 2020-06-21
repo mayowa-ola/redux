@@ -50,7 +50,7 @@ const slice = createSlice({
     }
 });
 
-const {bugRemoved, bugAdded, bugResolved, bugAssignToUser, bugReceived, bugRequested,bugRequestFailed} = slice.actions;
+export const {bugRemoved, bugAdded, bugResolved, bugAssignToUser, bugReceived, bugRequested,bugRequestFailed} = slice.actions;
 
 export default slice.reducer;
 
